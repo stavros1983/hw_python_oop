@@ -1,5 +1,4 @@
 from typing import Dict, Type
-MINUTE = 60
 
 
 class InfoMessage:
@@ -28,6 +27,7 @@ class Training:
     """Базовый класс тренировки."""
     M_IN_KM = 1000
     LEN_STEP = 0.65
+    MIN_IN_H = 60
 
     def __init__(self,
                  action: int,
@@ -67,7 +67,7 @@ class Running(Training):
     def get_spent_calories(self) -> float:
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
                 + self.CALORIES_MEAN_SPEED_SHIFT)
-                * self.weight / self.M_IN_KM * self.duration * MINUTE)
+                * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_H)
 
 
 class SportsWalking(Training):
@@ -85,9 +85,9 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         return ((self.C_W1 * self.weight
-                + (self.get_mean_speed() ** 2 / self.height)
+                + (self.get_mean_speed() ** 2 // self.height)
                 * self.C_W2 * self.weight)
-                * self.duration * MINUTE)
+                * self.duration * self.MIN_IN_H)
 
 
 class Swimming(Training):
